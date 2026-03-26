@@ -14,18 +14,18 @@ WebFurl compresses a full web page (often 200k+ tokens of raw HTML) into a hiera
 5. Everything is cached by content hash in MongoDB, so unchanged subtrees are never recompressed
 
 **What makes it different:**
-- **Recursive compression** — a page is a tree, not a flat summary. You can zoom into any branch.
-- **Cross-user cache** — the static parts of airbnb.com are compressed once and reused by everyone. Only dynamic content (prices, availability) gets recompressed.
-- **Query-driven unfolding** — when the user asks "find me a cheap listing", the tree auto-unfolds the most relevant nodes using embedding similarity, so the LLM sees a focused view without wasting budget on irrelevant sections.
-- **DOM-linked actions** — every interactive element has a pre-computed CSS selector that works against the live browser DOM. The agent can click links, fill forms, and navigate, with automatic handling of new tabs and page loads.
-- **Vision support** — images in the tree can be described on demand via a vision model, with descriptions cached.
+- **Recursive compression**: a page is a tree, not a flat summary. You can zoom into any branch.
+- **Cross-user cache**: the static parts of airbnb.com are compressed once and reused by everyone. Only dynamic content (prices, availability) gets recompressed.
+- **Query-driven unfolding**: when the user asks "find me a cheap listing", the tree auto-unfolds the most relevant nodes using embedding similarity, so the LLM sees a focused view without wasting budget on irrelevant sections.
+- **DOM-linked actions**: every interactive element has a pre-computed CSS selector that works against the live browser DOM. The agent can click links, fill forms, and navigate, with automatic handling of new tabs and page loads.
+- **Vision support**: images in the tree can be described on demand via a vision model, with descriptions cached.
 
 ## Prerequisites
 
-- **Rust** (stable, 1.75+) — [rustup.rs](https://rustup.rs)
-- **Docker** — for MongoDB ([Docker Desktop](https://docker.com/products/docker-desktop) on Mac)
-- **Chrome or Chromium** — auto-detected on Mac and Linux
-- **OpenRouter API key** — for LLM calls ([openrouter.ai](https://openrouter.ai))
+- **Rust** (stable, 1.75+): [rustup.rs](https://rustup.rs)
+- **Docker**: for MongoDB ([Docker Desktop](https://docker.com/products/docker-desktop) on Mac)
+- **Chrome or Chromium**: auto-detected on Mac and Linux
+- **OpenRouter API key**: for LLM calls ([openrouter.ai](https://openrouter.ai))
 
 ## Quick start
 
@@ -75,14 +75,14 @@ The agent will:
 | `/url <url>` | Navigate to a URL |
 | `/unfold <node_id>` | Manually expand a tree node |
 | `/fold <node_id>` | Collapse a node back |
-| `/search <query>` | Semantic search — unfolds the most relevant nodes |
+| `/search <query>` | Semantic search, unfolds the most relevant nodes |
 | `/tree` | Print the current tree structure |
 | `/screenshot` | Full page screenshot |
 | `/screenshot <selector>` | Element screenshot |
 | `/browser` | Open the current page in your default browser |
 | `/quit` | Exit |
 
-Or just type naturally — the agent handles navigation, clicking, and form filling autonomously.
+Or just type naturally. The agent handles navigation, clicking, and form filling autonomously.
 
 ## Configuration
 
@@ -114,16 +114,16 @@ Webfurl/
 ```
 
 **Core modules** (`webfurl-core`):
-- `pipeline.rs` — HTML → SemanticTree (DOM chunking, parallel LLM compression, interactive element extraction)
-- `tree.rs` — SemanticNode / SemanticTree data structures
-- `unfold.rs` — Budget-based unfolding, semantic query unfold with ancestor chain resolution
-- `serialize.rs` — Tree → `[WEBFURL]` text block for LLM context
-- `cache.rs` — MongoDB content-hash cache (cross-user, chunk-level)
-- `embeddings.rs` — OpenRouter embedding client (Qwen3-Embedding-8B)
+- `pipeline.rs`: HTML → SemanticTree (DOM chunking, parallel LLM compression, interactive element extraction)
+- `tree.rs`: SemanticNode / SemanticTree data structures
+- `unfold.rs`: Budget-based unfolding, semantic query unfold with ancestor chain resolution
+- `serialize.rs`: Tree → `[WEBFURL]` text block for LLM context
+- `cache.rs`: MongoDB content-hash cache (cross-user, chunk-level)
+- `embeddings.rs`: OpenRouter embedding client (Qwen3-Embedding-8B)
 
 **Agent** (`webfurl-agent`):
-- `agent.rs` — Conversation loop, action execution, query-driven pre-unfolding
-- `browser.rs` — Chrome CDP session (navigation, click, fill, tab management, page load detection)
+- `agent.rs`: Conversation loop, action execution, query-driven pre-unfolding
+- `browser.rs`: Chrome CDP session (navigation, click, fill, tab management, page load detection)
 
 ## How the cache works
 
@@ -135,4 +135,4 @@ This means the first user to visit airbnb.com pays the full compression cost. Th
 
 ## License
 
-AGPL-3.0 — see [LICENSE](LICENSE)
+AGPL-3.0, see [LICENSE](LICENSE)
